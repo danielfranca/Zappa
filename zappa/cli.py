@@ -874,19 +874,11 @@ class ZappaCLI:
                 self.execute_prebuild_script()
 
             # Temporary version check
-            try:
-                updated_time = 1472581018
-                function_response = self.zappa.lambda_client.get_function(FunctionName=self.lambda_name)
-                conf = function_response['Configuration']
-                last_updated = parser.parse(conf['LastModified'])
-                last_updated_unix = time.mktime(last_updated.timetuple())
-            except botocore.exceptions.BotoCoreError as e:
-                click.echo(click.style(type(e).__name__, fg="red") + ": " + e.args[0])
-                sys.exit(-1)
-            except Exception as e:
-                click.echo(click.style("Warning!", fg="red") + " Couldn't get function " + self.lambda_name +
-                           " in " + self.zappa.aws_region + " - have you deployed yet?")
-                sys.exit(-1)
+            updated_time = 1472581018
+            function_response = self.zappa.lambda_client.get_function(FunctionName=self.lambda_name)
+            conf = function_response['Configuration']
+            last_updated = parser.parse(conf['LastModified'])
+            last_updated_unix = time.mktime(last_updated.timetuple())
 
             if last_updated_unix <= updated_time:
                 click.echo(click.style("Warning!", fg="red") +
